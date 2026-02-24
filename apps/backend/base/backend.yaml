@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: backend
   namespace: store-backend
+  labels:
+    app: backend
 spec:
   replicas: 1
   selector:
@@ -15,10 +17,48 @@ spec:
     spec:
       containers:
       - name: backend
-        image: akarv/online-store-backend:v4
+        image: akarv/online-store-backend:latest 
         ports:
-        - name: http-backend  # Имя порта на уровне контейнера
+        - name: http-backend
           containerPort: 8081
+        
+        # --- ЛИМИТЫ РЕСУРСОВ ---
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        
+        # --- ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ---
+        env:
+        - name: PORT
+          value: "8081"
+        - name: REDIS_URL
+          value: "redis://redis-store:6379"
+        - name: MONGO_USER
+          value: "den4ik"
+        - name: MONGO_DATABASE
+          value: "webeccomerse"
+        - name: MONGO_PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: MONGO_PASSWD
+              
+        # --- ПРОВЕРКИ ЖИЗНИ (Health Checks) ---
+        readinessProbe:
+          tcpSocket:
+            port: http-backend
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: http-backend
+          initialDelaySeconds: 15
+          periodSeconds: 20
+
 ---
 apiVersion: v1
 kind: Service
@@ -31,6 +71,6 @@ spec:
   selector:
     app: backend
   ports:
-  - name: http           # Имя порта, которое видит Gateway и Prometheus
+  - name: http
     port: 80
-    targetPort: http-backend # Связываем с именем в Deployment
+    targetPort: http-backend
