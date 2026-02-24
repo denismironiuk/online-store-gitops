@@ -1,0 +1,18 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: backend-scaler
+  namespace: store-backend
+spec:
+  scaleTargetRef:
+    name: backend # Твой Deployment
+  minReplicaCount: 1 # Минимум 1 под (или 0, если хочешь экстрима)
+  maxReplicaCount: 10
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://monitor-kube-prometheus-st-prometheus.monitoring.svc.cluster.local:9090
+      metricName: shop_online_users_current # Наша метрика из Redis
+      query: |
+        shop_online_users_current
+      threshold: '1' # На каждых 20 человек добавляем новый под

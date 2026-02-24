@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: store-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: akarv/online-store-backend:v4
+        ports:
+        - name: http-backend  # Имя порта на уровне контейнера
+          containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: store-backend
+  labels:
+    monitor: apps
+spec:
+  selector:
+    app: backend
+  ports:
+  - name: http           # Имя порта, которое видит Gateway и Prometheus
+    port: 80
+    targetPort: http-backend # Связываем с именем в Deployment
