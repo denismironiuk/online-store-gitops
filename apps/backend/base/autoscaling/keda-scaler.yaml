@@ -15,4 +15,4 @@ spec:
       metricName: shop_online_users_current # Наша метрика из Redis
       query: |
         shop_online_users_current
-      threshold: '1' # На каждых 20 человек добавляем новый под
+      threshold: '20' # На каждых 20 человек добавляем новый под
