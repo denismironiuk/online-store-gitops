@@ -7,4 +7,4 @@ resources:
 images:
 - name: akarv/online-store-frontend
   newName: akarv/online-store-frontend
-  newTag: v6
+  newTag: v7
