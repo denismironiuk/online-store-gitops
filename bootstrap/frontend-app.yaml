@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: online-store-fronyend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/denismironiuk/online-store-gitops.git'
+    # Путь, где лежит kustomization для продакшена:
+    path: apps/frontend/overlays/prod
+    targetRevision: HEAD
+  destination:
+    # Разворачиваем в локальный кластер (где стоит сам ArgoCD)
+    server: 'https://kubernetes.default.svc'
+    namespace: store-frontend
+  syncPolicy:
+    automated:
+      prune: true     # Удалять ресурсы, которых больше нет в Git
+      selfHeal: true  # Автоматически возвращать всё как было, если кто-то поменяет настройки руками через kubectl
