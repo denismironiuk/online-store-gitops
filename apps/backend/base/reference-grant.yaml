@@ -7,7 +7,7 @@ spec:
   from:
   - group: gateway.networking.k8s.io
     kind: Gateway # Кто стучится
-    namespace: nginx-gateway # Из какого неймспейса
+    namespace: envoy-gateway-system # Из какого неймспейса
   to:
   - group: "" 
     kind: Service # К чему даем доступ

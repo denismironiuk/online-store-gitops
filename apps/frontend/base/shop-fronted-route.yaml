@@ -5,8 +5,8 @@ metadata:
   namespace: store-frontend
 spec:
   parentRefs:
-  - name: external-gateway
-    namespace: nginx-gateway
+  - name: main-gateway            # МЕНЯЕМ с external-gateway
+    namespace: envoy-gateway-system
   hostnames:
   - "shop.jenkinsdevops.org"
   rules:

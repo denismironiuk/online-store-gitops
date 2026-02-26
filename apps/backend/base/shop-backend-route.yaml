@@ -5,8 +5,8 @@ metadata:
   namespace: store-backend
 spec:
   parentRefs:
-  - name: external-gateway
-    namespace: nginx-gateway # Четко указываем, к какому шлюзу цепляемся
+  - name: main-gateway            # МЕНЯЕМ с external-gateway
+    namespace: envoy-gateway-system # Четко указываем, к какому шлюзу цепляемся
   hostnames:
   - "shop.jenkinsdevops.org"
   rules:

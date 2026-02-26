@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: твой-email@gmail.com # Укажи свою почту
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - dns01:
+        azureDNS:
+          subscriptionId: "fcf3f628-5f65-43c3-8a08-8b202b22def0"
+          resourceGroupName: "rg-onlinestore-prod"
+          hostedZoneName: "jenkinsdevops.org"
+          environment: AzurePublicCloud
